@@ -1,5 +1,5 @@
 # Первый стейдж + использую легковесный образ Python
-FROM python:3.13-slim AS builder
+FROM python:3.13-alpine AS builder
 
 
 # ставлю зависимости
@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 #Второй стейдж + добавляю stdout для логов
 
-FROM python:3.13-slim
+FROM python:3.13-alpine
 
 ENV PYTHONUNBUFFERED=1
 
@@ -21,7 +21,7 @@ COPY --from=builder /install /usr/local
 #Само приложение
 COPY . .
 #Rootless Пользователь
-RUN useradd --system --no-create-home rootless_user
+RUN adduser --system --no-create-home rootless_user
 
 USER rootless_user
 
